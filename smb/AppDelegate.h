@@ -11,7 +11,6 @@
 @class NetSSFileListManager;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
-
 @property (copy)NSString* mountedRoot;
 @end
 

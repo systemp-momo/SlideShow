@@ -15,7 +15,7 @@
 #import <NetFS/NetFS.h>
 #import "AppDelegate.h"
 #import "NetSSFileListManager.h"
-#import "SPSmbPreferenceWindowController.h"
+#import "AppSettings.h"
 
 @interface AppDelegate ()
 
@@ -26,37 +26,21 @@
 @property (strong) NSImage* displayingImage;
 @property (copy) NSString* displayingImagePath;
 
-@property (strong)NSString* serverPath;
-@property (strong)NSString* serverDirectory;
-@property (strong)NSString* userName;
-@property (strong)NSString* password;
-@property (strong)NSString* mountedVolumeName;
-@property (strong)NSNumber* slideShowIntervalSeconds;
-@property (strong)NSArray* excludedFileExtentionArray;
-@property (strong)NSArray* excludedDirectoryArray;
-@property (strong)SPSmbPreferenceWindowController* preferenceController;
+@property (strong)AppSettings* appSettings;
 @end
 
 @implementation AppDelegate
-static NSString * const SPPrefKeyServerPath = @"ServerPath";
-static NSString * const SPPrefKeyServerDirectory = @"ServerDirectory";
-static NSString * const SPPrefKeyUserName = @"UserName";
-static NSString * const SPPrefKeyPassword = @"Password";
-static NSString * const SPPrefKeyMountedVolumesName = @"MountedVolumeName";
-static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalSeconds";
-static NSString * const SPPrefKeyExcludedDirectoryArray = @"ExcludedDirectoryArray";
-static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExtentionArray";
 
+#pragma mark app delegate.
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
     return YES;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [self setDefaultPreferences];
-    [self loadPreferences];
+    self.appSettings = [[AppSettings alloc]init];
 
-    if( [self.serverPath length]<=0 )
+    if( ![self.appSettings isValidSettings] )
     {
         [self showPrefernces:self];
     }
@@ -72,62 +56,30 @@ static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExte
     self.timer = nil;
     self.displayingImage = nil;
     self.displayingImagePath = nil;
+    self.appSettings = nil;
 }
 
+#pragma mark preferences.
 - (IBAction)showPrefernces:(id)sender
 {
-    self.preferenceController = [[SPSmbPreferenceWindowController alloc]initWithWindowNibName:@"SPSmbPreferenceWindowController"];
-    [[NSApplication sharedApplication]
-     runModalForWindow:[self.preferenceController window]];
-    [[self.preferenceController window] orderOut:self];
-    
-    [self loadPreferences];
-    
-    if( [self.serverPath length] > 0 )
+    if( [self.appSettings showPreference] )
     {
         // start slide show.
         [self mount];
     }
+    
     return;
 }
 
 
--(void)loadPreferences
-{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.serverPath = [defaults objectForKey:SPPrefKeyServerPath];
-    self.serverDirectory = [defaults objectForKey:SPPrefKeyServerDirectory];
-    self.userName = [defaults objectForKey:SPPrefKeyUserName];
-    self.password = [defaults objectForKey:SPPrefKeyPassword];
-    self.mountedVolumeName = [defaults objectForKey:SPPrefKeyMountedVolumesName];
-    self.slideShowIntervalSeconds = [defaults objectForKey:SPPrefKeySlideShowIntervalSeconds];
-    self.excludedFileExtentionArray = [defaults objectForKey:SPPrefKeyExcludedFileExtentionArray];
-    self.excludedDirectoryArray = [defaults objectForKey:SPPrefKeyExcludedDirectoryArray];
-    return;
-}
--(void)setDefaultPreferences
-{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *defaultsDict = @{
-                                   SPPrefKeyServerPath : @"",
-                                   SPPrefKeyServerDirectory : @"",
-                                   SPPrefKeyUserName : @"",
-                                   SPPrefKeyPassword : @"",
-                                   SPPrefKeyMountedVolumesName : @"/Volumes",
-                                   SPPrefKeySlideShowIntervalSeconds : @3,
-                                   SPPrefKeyExcludedFileExtentionArray :@[],
-                                   SPPrefKeyExcludedDirectoryArray : @[]
-                                   };
-    [defaults registerDefaults:defaultsDict];
-
-    return;
-}
-
+#pragma mark for SMB
 -(void)mount
 {
-    NSURL *url = [NSURL URLWithString:self.serverPath];
-    NSURL *path = [NSURL URLWithString:self.mountedVolumeName];
-
+    CFURLRef url = (__bridge CFURLRef)[NSURL URLWithString:self.appSettings.serverPath];
+    CFURLRef path = (__bridge CFURLRef)[NSURL URLWithString:self.appSettings.mountedVolumeName];
+    CFStringRef username = (__bridge CFStringRef)(self.appSettings.userName);
+    CFStringRef password = (__bridge CFStringRef)(self.appSettings.password);
+    
     NSMutableDictionary *openOptions = [NSMutableDictionary dictionaryWithObject:@NO forKey:(NSString*)kNetFSMountAtMountDirKey];;
     AsyncRequestID requestID;
     dispatch_queue_t dispath = dispatch_get_main_queue();
@@ -139,15 +91,7 @@ static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExte
         [self mountDidFinished:mountPoint];
     };
     
-    NetFSMountURLAsync((__bridge CFURLRef)(url),
-                       (__bridge CFURLRef)(path),
-                       (__bridge CFStringRef)(self.userName),
-                       (__bridge CFStringRef)(self.password),
-                       (__bridge CFMutableDictionaryRef)(openOptions),
-                       nil,
-                       &requestID,
-                       dispath,
-                       mount_report);
+    NetFSMountURLAsync(url, path, username, password, (__bridge CFMutableDictionaryRef)(openOptions), nil, &requestID, dispath, mount_report);
 
     return;
 }
@@ -161,6 +105,7 @@ static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExte
     return;
 }
 
+#pragma mark Slide show
 -(void)startSlideShow
 {
     [self.timer invalidate];
@@ -171,10 +116,10 @@ static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExte
     
     self.fileListManager.onCollectingCompletion = ^(){};
     
-    NSString* scanPath = [NSString stringWithFormat:@"%@/%@", self.mountedRoot, self.serverDirectory];
+    NSString* scanPath = [NSString stringWithFormat:@"%@/%@", self.mountedRoot, self.appSettings.serverDirectory];
     [self.fileListManager collectTree:scanPath];
     
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
 }
 
 -(void)loadImage
@@ -187,7 +132,7 @@ static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExte
             self.displayingImage = loadedImage;
             self.displayingImagePath = path;
             self.imageView.toolTip = path;
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
         });
     }
 }

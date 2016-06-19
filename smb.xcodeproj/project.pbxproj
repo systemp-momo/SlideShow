@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B086F651D16B69900D32CFA /* AppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B086F641D16B69900D32CFA /* AppSettings.m */; };
 		4B6F191A1D1516FC00B06155 /* SPSmbPreferenceWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */; };
 		4B6F191B1D1516FC00B06155 /* SPSmbPreferenceWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */; };
 		4BF8589F1D0D4864003E7851 /* NetSSComponentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF858981D0D4864003E7851 /* NetSSComponentObject.m */; };
@@ -22,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4B086F631D16B69900D32CFA /* AppSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSettings.h; sourceTree = "<group>"; };
+		4B086F641D16B69900D32CFA /* AppSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppSettings.m; sourceTree = "<group>"; };
 		4B6F19171D1516FC00B06155 /* SPSmbPreferenceWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbPreferenceWindowController.h; sourceTree = "<group>"; };
 		4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbPreferenceWindowController.m; sourceTree = "<group>"; };
 		4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SPSmbPreferenceWindowController.xib; sourceTree = "<group>"; };
@@ -88,6 +91,8 @@
 				4BF8589E1D0D4864003E7851 /* NetSSLeaf.m */,
 				4BFF006A1C0296D4009302FF /* AppDelegate.h */,
 				4BFF006B1C0296D4009302FF /* AppDelegate.m */,
+				4B086F631D16B69900D32CFA /* AppSettings.h */,
+				4B086F641D16B69900D32CFA /* AppSettings.m */,
 				4B6F19171D1516FC00B06155 /* SPSmbPreferenceWindowController.h */,
 				4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */,
 				4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */,
@@ -179,6 +184,7 @@
 			files = (
 				4BFF006F1C0296D4009302FF /* main.m in Sources */,
 				4BF858A21D0D4864003E7851 /* NetSSLeaf.m in Sources */,
+				4B086F651D16B69900D32CFA /* AppSettings.m in Sources */,
 				4B6F191A1D1516FC00B06155 /* SPSmbPreferenceWindowController.m in Sources */,
 				4BFF006C1C0296D4009302FF /* AppDelegate.m in Sources */,
 				4BF8589F1D0D4864003E7851 /* NetSSComponentObject.m in Sources */,

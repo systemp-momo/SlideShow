@@ -7,12 +7,14 @@
 //
 
 #import "SPSmbPreferenceWindowController.h"
+#import "AppDelegate.h"
 
 @interface SPSmbPreferenceWindowController ()
 
 @end
 
 @implementation SPSmbPreferenceWindowController
+
 
 - (void)windowDidLoad {
     [super windowDidLoad];
@@ -24,4 +26,5 @@
     [[NSApplication sharedApplication] stopModal];
     return;
 }
+
 @end

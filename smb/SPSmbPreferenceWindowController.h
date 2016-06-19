@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class AppDelegate;
 @interface SPSmbPreferenceWindowController : NSWindowController
+
 
 @end
