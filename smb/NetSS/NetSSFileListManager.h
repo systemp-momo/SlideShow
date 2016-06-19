@@ -18,5 +18,7 @@ typedef void (^__notify_collecting_completion)();
 -(NSString*)getImagePathAtRandom;
 
 @property (atomic, copy) __notify_collecting_completion onCollectingCompletion;
+@property (strong) NSArray* excludedFileExtensionList;
+@property (strong) NSArray* excludedDirectoryNameList;
 
 @end

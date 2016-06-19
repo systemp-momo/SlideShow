@@ -32,6 +32,8 @@
 @property (strong)NSString* password;
 @property (strong)NSString* mountedVolumeName;
 @property (strong)NSNumber* slideShowIntervalSeconds;
+@property (strong)NSArray* excludedFileExtentionArray;
+@property (strong)NSArray* excludedDirectoryArray;
 @property (strong)SPSmbPreferenceWindowController* preferenceController;
 @end
 
@@ -42,16 +44,50 @@ static NSString * const SPPrefKeyUserName = @"UserName";
 static NSString * const SPPrefKeyPassword = @"Password";
 static NSString * const SPPrefKeyMountedVolumesName = @"MountedVolumeName";
 static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalSeconds";
+static NSString * const SPPrefKeyExcludedDirectoryArray = @"ExcludedDirectoryArray";
+static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExtentionArray";
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+    return YES;
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [self setDefaultPreferences];
+    [self loadPreferences];
+
+    if( [self.serverPath length]<=0 )
+    {
+        [self showPrefernces:self];
+    }
+    else
+    {
+        [self mount];
+    }
+}
+
+- (void)applicationWillTerminate:(NSNotification *)aNotification {
+    self.fileListManager = nil;
+    [self.timer invalidate];
+    self.timer = nil;
+    self.displayingImage = nil;
+    self.displayingImagePath = nil;
+}
 
 - (IBAction)showPrefernces:(id)sender
 {
     self.preferenceController = [[SPSmbPreferenceWindowController alloc]initWithWindowNibName:@"SPSmbPreferenceWindowController"];
     [[NSApplication sharedApplication]
-              runModalForWindow:[self.preferenceController window]];
-    [[self.preferenceController window] orderOut:nil];
+     runModalForWindow:[self.preferenceController window]];
+    [[self.preferenceController window] orderOut:self];
     
     [self loadPreferences];
-
+    
+    if( [self.serverPath length] > 0 )
+    {
+        // start slide show.
+        [self mount];
+    }
     return;
 }
 
@@ -65,7 +101,8 @@ static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalS
     self.password = [defaults objectForKey:SPPrefKeyPassword];
     self.mountedVolumeName = [defaults objectForKey:SPPrefKeyMountedVolumesName];
     self.slideShowIntervalSeconds = [defaults objectForKey:SPPrefKeySlideShowIntervalSeconds];
-
+    self.excludedFileExtentionArray = [defaults objectForKey:SPPrefKeyExcludedFileExtentionArray];
+    self.excludedDirectoryArray = [defaults objectForKey:SPPrefKeyExcludedDirectoryArray];
     return;
 }
 -(void)setDefaultPreferences
@@ -77,30 +114,13 @@ static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalS
                                    SPPrefKeyUserName : @"",
                                    SPPrefKeyPassword : @"",
                                    SPPrefKeyMountedVolumesName : @"/Volumes",
-                                   SPPrefKeySlideShowIntervalSeconds : @3
+                                   SPPrefKeySlideShowIntervalSeconds : @3,
+                                   SPPrefKeyExcludedFileExtentionArray :@[],
+                                   SPPrefKeyExcludedDirectoryArray : @[]
                                    };
     [defaults registerDefaults:defaultsDict];
+
     return;
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [self setDefaultPreferences];
-    [self loadPreferences];
-
-    while( [self.serverPath length]<=0 )
-    {
-        [self showPrefernces:self];
-    }
-    [self mount];
-
-}
-
-- (void)applicationWillTerminate:(NSNotification *)aNotification {
-    self.fileListManager = nil;
-    [self.timer invalidate];
-    self.timer = nil;
-    self.displayingImage = nil;
-    self.displayingImagePath = nil;
 }
 
 -(void)mount
@@ -112,14 +132,22 @@ static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalS
     AsyncRequestID requestID;
     dispatch_queue_t dispath = dispatch_get_main_queue();
     
-    __weak AppDelegate *weakSelf = self;
     NetFSMountURLBlock mount_report = ^(int status, AsyncRequestID requestID, CFArrayRef mountpoints)
     {
-        NSArray* mountPointArray = (__bridge NSArray*)mountpoints;
-        [weakSelf mountDidFinished:mountPointArray[0]];
+        CFStringRef str = CFArrayGetValueAtIndex(mountpoints, 0);
+        NSString* mountPoint = [NSString stringWithString:(__bridge_transfer NSString*)str];
+        [self mountDidFinished:mountPoint];
     };
     
-    NetFSMountURLAsync((__bridge CFURLRef)(url), (__bridge CFURLRef)(path), (__bridge CFStringRef)(self.userName), (__bridge CFStringRef)(self.password), (__bridge CFMutableDictionaryRef)(openOptions), nil, &requestID, dispath, mount_report);
+    NetFSMountURLAsync((__bridge CFURLRef)(url),
+                       (__bridge CFURLRef)(path),
+                       (__bridge CFStringRef)(self.userName),
+                       (__bridge CFStringRef)(self.password),
+                       (__bridge CFMutableDictionaryRef)(openOptions),
+                       nil,
+                       &requestID,
+                       dispath,
+                       mount_report);
 
     return;
 }
@@ -128,15 +156,25 @@ static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalS
 {
     self.mountedRoot = point;
     
+    [self startSlideShow];
+
+    return;
+}
+
+-(void)startSlideShow
+{
+    [self.timer invalidate];
+
     self.fileListManager  = [[NetSSFileListManager alloc]init];
+    self.fileListManager.excludedFileExtensionList = @[@"ORF", @"orf", @"psd", @"PSD", @"xmp"];
+    self.fileListManager.excludedDirectoryNameList = @[@".webaxs"];
+    
     self.fileListManager.onCollectingCompletion = ^(){};
     
     NSString* scanPath = [NSString stringWithFormat:@"%@/%@", self.mountedRoot, self.serverDirectory];
     [self.fileListManager collectTree:scanPath];
-   
+    
     self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
-
-    return;
 }
 
 -(void)loadImage
@@ -157,10 +195,9 @@ static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalS
 {
     [self.timer invalidate];
     
-    __weak AppDelegate *weakSelf = self;
     dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(globalQueue, ^(){
-        [weakSelf loadImage];
+        [self loadImage];
     });
 }
 

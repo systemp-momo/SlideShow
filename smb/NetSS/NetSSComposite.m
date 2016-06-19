@@ -13,16 +13,15 @@
 {
     self = [super init];
     if (self) {
-        self.children = [NSMutableArray array];
+        _children = [NSMutableArray array];
     }
     return self;
 }
 
 -(void)dealloc
 {
-    [self.children removeAllObjects];
-    self.children = nil;
-    // not call [super dealloc];
+    [_children removeAllObjects];
+    _children = nil;
 }
 
 @end

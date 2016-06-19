@@ -21,7 +21,7 @@
 }
 -(IBAction)okButton:(id)sender
 {
-    [self close];
+    [[NSApplication sharedApplication] stopModal];
     return;
 }
 @end

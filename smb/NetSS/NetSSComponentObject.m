@@ -20,7 +20,6 @@
 -(void)dealloc
 {
     self.fullPath = nil;
-    // not call [super dealloc];
 }
 
 @end

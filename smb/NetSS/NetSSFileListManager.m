@@ -23,19 +23,22 @@
 {
     self = [super init];
     if (self) {
-        self.root = nil;
-        self.fileList = [NSMutableArray array];
-        self.isCollecting = NO;
-        self.cancel = NO;
+        _root = nil;
+        _excludedFileExtensionList = [NSArray array];
+        _excludedDirectoryNameList = [NSArray array];
+        _fileList = [NSMutableArray array];
+        _isCollecting = NO;
+        _cancel = NO;
     }
     return self;
 }
 
 -(void)dealloc
 {
-    self.root = nil;
-    self.fileList = nil;
-    // not call [super dealloc];
+    _excludedFileExtensionList = nil;
+    _excludedDirectoryNameList = nil;
+    _root = nil;
+    _fileList = nil;
 }
 
 -(void)collectTree:(NSString*)url
@@ -45,6 +48,7 @@
     self.cancel = NO;
     
     self.isCollecting = YES;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [self getDirectoryList:[self makeRootUrlPath:url] for:self.root];
         
@@ -74,35 +78,49 @@
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSArray* contents = [fm contentsOfDirectoryAtPath:url error:nil];
-    for(NSString* content in contents)
-    {
+    void (^block)(NSString*, NSUInteger, BOOL*) = ^(NSString* content, NSUInteger idx, BOOL* stop){
         BOOL isDir = NO;
         NSString* contentFullpath = [NSString stringWithFormat:@"%@%@", url, content];
         [fm fileExistsAtPath:contentFullpath isDirectory:&isDir];
-        if(isDir)
+        
+        if(isDir && [self isValidDirectoryName:contentFullpath])
         {
-            NetSSComposite* obj = [[NetSSComposite alloc]init];
-            NSString *suffix = [contentFullpath hasSuffix:@"/"] ? @"" :@"/";
-            obj.fullPath = [NSString stringWithFormat:@"%@%@", contentFullpath, suffix];
-            [composite.children addObject:obj];
-
+            NetSSComposite* obj = [self addDirectoryWith:contentFullpath toNode:composite];
             [self getDirectoryList:obj.fullPath for:obj];
         }
-        else
+        else if( [self isImageFile:contentFullpath])
         {
-            if( [self isImageFile:contentFullpath])
-            {
-                NetSSLeaf* obj = [[NetSSLeaf alloc]init];
-                obj.fullPath = contentFullpath;
-                [composite.children addObject:obj];
-                @synchronized(self) {
-                    [self.fileList addObject:obj.fullPath];
-                }
-            }
+            [self addImageFileWith:contentFullpath toNode:composite];
         }
-    }
+    };
+    [contents enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:block];
+
     return;
 }
+-(void)addImageFileWith:(NSString*)fullpath toNode:(NetSSComposite*)node
+{
+    NetSSLeaf* obj = [[NetSSLeaf alloc]init];
+    obj.fullPath = fullpath;
+    [node.children addObject:obj];
+    @synchronized(self) {
+        [self.fileList addObject:obj.fullPath];
+    }
+}
+-(NetSSComposite*)addDirectoryWith:(NSString*)fullpath toNode:(NetSSComposite*)node
+{
+    NetSSComposite* obj = [[NetSSComposite alloc]init];
+    NSString *suffix = [fullpath hasSuffix:@"/"] ? @"" :@"/";
+    obj.fullPath = [NSString stringWithFormat:@"%@%@", fullpath, suffix];
+    [node.children addObject:obj];
+    
+    return obj;
+}
+-(BOOL)isValidDirectoryName:(NSString*)fullpath
+{
+    NSString* directoryName = [[fullpath pathComponents] lastObject];
+    return (![self.excludedDirectoryNameList containsObject:directoryName]);
+}
+
 -(BOOL)isImageFile:(NSString*)fullpath
 {
     BOOL isImage = NO;
@@ -110,10 +128,9 @@
     NSString* uti=[[NSWorkspace sharedWorkspace] typeOfFile:fullpath error:nil];
     isImage = [[NSWorkspace sharedWorkspace] type:uti conformsToType:@"public.image"];
     
-    NSArray* exceptionList = @[@"ORF", @"orf", @"psd", @"PSD", @"xmp"];
     NSString* extension = [fullpath pathExtension];
 
-    if(isImage && ![exceptionList containsObject:extension])
+    if(isImage && ![self.excludedFileExtensionList containsObject:extension])
     {
         return YES;
     }

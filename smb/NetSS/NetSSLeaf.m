@@ -19,7 +19,6 @@
 
 -(void)dealloc
 {
-    // not call [super dealloc];
 }
 
 @end
