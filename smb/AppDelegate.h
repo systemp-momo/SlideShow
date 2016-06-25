@@ -7,10 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "NetSSFileListManager.h"
 
 @class NetSSFileListManager;
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NetSSDirectoryDelegate>
 @property (copy)NSString* mountedRoot;
 @end
 

@@ -24,19 +24,17 @@
     self = [super init];
     if (self) {
         _root = nil;
-        _excludedFileExtensionList = [NSArray array];
-        _excludedDirectoryNameList = [NSArray array];
         _fileList = [NSMutableArray array];
         _isCollecting = NO;
         _cancel = NO;
+        _delegate = nil;
     }
     return self;
 }
 
 -(void)dealloc
 {
-    _excludedFileExtensionList = nil;
-    _excludedDirectoryNameList = nil;
+    _delegate = nil;
     _root = nil;
     _fileList = nil;
 }
@@ -88,16 +86,16 @@
             NetSSComposite* obj = [self addDirectoryWith:contentFullpath toNode:composite];
             [self getDirectoryList:obj.fullPath for:obj];
         }
-        else if( [self isImageFile:contentFullpath])
+        else if( [self isValidFileName:contentFullpath])
         {
-            [self addImageFileWith:contentFullpath toNode:composite];
+            [self addFileWith:contentFullpath toNode:composite];
         }
     };
     [contents enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:block];
 
     return;
 }
--(void)addImageFileWith:(NSString*)fullpath toNode:(NetSSComposite*)node
+-(void)addFileWith:(NSString*)fullpath toNode:(NetSSComposite*)node
 {
     NetSSLeaf* obj = [[NetSSLeaf alloc]init];
     obj.fullPath = fullpath;
@@ -115,32 +113,29 @@
     
     return obj;
 }
+
+
+-(BOOL)isValidFileName:(NSString*)fullpath
+{
+    BOOL isValid = YES;
+    if(self.delegate!=nil && [self.delegate respondsToSelector:@selector(isValidFileName:)])
+    {
+        isValid = [self.delegate isValidFileName:fullpath];
+    }
+    return isValid;
+}
+
 -(BOOL)isValidDirectoryName:(NSString*)fullpath
 {
-    NSString* directoryName = [[fullpath pathComponents] lastObject];
-    return (![self.excludedDirectoryNameList containsObject:directoryName]);
+    BOOL isValid = YES;
+    if(self.delegate!=nil && [self.delegate respondsToSelector:@selector(isValidDirectoryName:)])
+    {
+        isValid = [self.delegate isValidDirectoryName:fullpath];
+    }
+    return isValid;
 }
 
--(BOOL)isImageFile:(NSString*)fullpath
-{
-    BOOL isImage = NO;
-    
-    NSString* uti=[[NSWorkspace sharedWorkspace] typeOfFile:fullpath error:nil];
-    isImage = [[NSWorkspace sharedWorkspace] type:uti conformsToType:@"public.image"];
-    
-    NSString* extension = [fullpath pathExtension];
-
-    if(isImage && ![self.excludedFileExtensionList containsObject:extension])
-    {
-        return YES;
-    }
-    else
-    {
-        return NO;
-    }
-}
-
--(NSString*)getImagePathAtRandom
+-(NSString*)getPathAtRandom
 {
     NSString *result = nil;
     @synchronized(self) {

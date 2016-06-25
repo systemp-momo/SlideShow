@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AppSettings : NSObject
+@interface SPSmbAppSettings : NSObject
 @property (strong)NSString* serverPath;
 @property (strong)NSString* serverDirectory;
 @property (strong)NSString* userName;
@@ -21,6 +21,7 @@
 - (void)loadPreferences;
 - (void)setDefaultPreferences;
 - (BOOL)showPreference;
--(BOOL) isValidSettings;
+- (BOOL) isValidSettings;
++ (NSString*)exludedArrayItemKey;
 
 @end

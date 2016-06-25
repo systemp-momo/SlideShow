@@ -15,7 +15,7 @@
 #import <NetFS/NetFS.h>
 #import "AppDelegate.h"
 #import "NetSSFileListManager.h"
-#import "AppSettings.h"
+#import "SPSmbAppSettings.h"
 
 @interface AppDelegate ()
 
@@ -26,7 +26,7 @@
 @property (strong) NSImage* displayingImage;
 @property (copy) NSString* displayingImagePath;
 
-@property (strong)AppSettings* appSettings;
+@property (strong)SPSmbAppSettings* appSettings;
 @end
 
 @implementation AppDelegate
@@ -36,10 +36,15 @@
 {
     return YES;
 }
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
+{
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    self.appSettings = [[AppSettings alloc]init];
-
+    self.appSettings = [[SPSmbAppSettings alloc]init];
+    self.fileListManager  = [[NetSSFileListManager alloc]init];
+    self.fileListManager.delegate = self;
+    
     if( ![self.appSettings isValidSettings] )
     {
         [self showPrefernces:self];
@@ -51,6 +56,7 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
+    self.fileListManager.delegate = nil;
     self.fileListManager = nil;
     [self.timer invalidate];
     self.timer = nil;
@@ -75,7 +81,8 @@
 #pragma mark for SMB
 -(void)mount
 {
-    CFURLRef url = (__bridge CFURLRef)[NSURL URLWithString:self.appSettings.serverPath];
+    NSString* fullpath = [NSString stringWithFormat:@"smb://%@", self.appSettings.serverPath];
+    CFURLRef url = (__bridge CFURLRef)[NSURL URLWithString:fullpath];
     CFURLRef path = (__bridge CFURLRef)[NSURL URLWithString:self.appSettings.mountedVolumeName];
     CFStringRef username = (__bridge CFStringRef)(self.appSettings.userName);
     CFStringRef password = (__bridge CFStringRef)(self.appSettings.password);
@@ -110,10 +117,6 @@
 {
     [self.timer invalidate];
 
-    self.fileListManager  = [[NetSSFileListManager alloc]init];
-    self.fileListManager.excludedFileExtensionList = @[@"ORF", @"orf", @"psd", @"PSD", @"xmp"];
-    self.fileListManager.excludedDirectoryNameList = @[@".webaxs"];
-    
     self.fileListManager.onCollectingCompletion = ^(){};
     
     NSString* scanPath = [NSString stringWithFormat:@"%@/%@", self.mountedRoot, self.appSettings.serverDirectory];
@@ -122,20 +125,6 @@
     self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
 }
 
--(void)loadImage
-{
-    NSString* path = [self.fileListManager getImagePathAtRandom];
-    if(path)
-    {
-        NSImage* loadedImage = [[NSImage alloc] initWithContentsOfFile:path];
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            self.displayingImage = loadedImage;
-            self.displayingImagePath = path;
-            self.imageView.toolTip = path;
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
-        });
-    }
-}
 - (void)repeatMethod:(NSTimer *)timer
 {
     [self.timer invalidate];
@@ -146,4 +135,56 @@
     });
 }
 
+-(void)loadImage
+{
+    NSString* path = [self.fileListManager getPathAtRandom];
+    if(path)
+    {
+        NSImage* loadedImage = [[NSImage alloc] initWithContentsOfFile:path];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            self.displayingImage = loadedImage;
+            self.displayingImagePath = path;
+            self.imageView.toolTip = path;
+            self.window.title = path;
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
+        });
+    }
+}
+
+#pragma mark NetSSDirectoryDelegate
+-(BOOL)isValidDirectoryName:(NSString*)fullpath
+{
+    NSString* directoryName = [[fullpath pathComponents] lastObject];
+    return (![self containsStringCaseInsensitiveWithString:directoryName inExcludedArray:self.appSettings.excludedDirectoryArray]);
+}
+
+-(BOOL)isValidFileName:(NSString*)fullpath
+{
+    BOOL isImage = NO;
+    
+    NSString* uti=[[NSWorkspace sharedWorkspace] typeOfFile:fullpath error:nil];
+    isImage = [[NSWorkspace sharedWorkspace] type:uti conformsToType:@"public.image"];
+    
+    NSString* extension = [fullpath pathExtension];
+    
+    if(isImage && ![self containsStringCaseInsensitiveWithString:extension inExcludedArray:self.appSettings.excludedFileExtentionArray])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
+
+-(BOOL)containsStringCaseInsensitiveWithString:(NSString*)string inExcludedArray:(NSArray*)array
+{
+    __block BOOL contains = NO;
+    [array enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSDictionary* content, NSUInteger idx, BOOL* stop){
+        NSString *excluded = [content objectForKey:[SPSmbAppSettings exludedArrayItemKey]];
+        contains = (NSOrderedSame == [string caseInsensitiveCompare:excluded]);
+        *stop = contains;
+    }];
+    return contains;
+}
 @end

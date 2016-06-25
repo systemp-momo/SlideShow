@@ -11,14 +11,18 @@
 
 typedef void (^__notify_collecting_completion)();
 
+@protocol NetSSDirectoryDelegate
+-(BOOL)isValidDirectoryName:(NSString*)fullpath;
+-(BOOL)isValidFileName:(NSString*)fullpath;
+@end
+
 @interface NetSSFileListManager : NSObject
 
 -(void)collectTree:(NSString*)url;
 -(void)cancelCollecting;
--(NSString*)getImagePathAtRandom;
+-(NSString*)getPathAtRandom;
 
 @property (atomic, copy) __notify_collecting_completion onCollectingCompletion;
-@property (strong) NSArray* excludedFileExtensionList;
-@property (strong) NSArray* excludedDirectoryNameList;
+@property (atomic, assign)NSObject<NetSSDirectoryDelegate>* delegate;
 
 @end

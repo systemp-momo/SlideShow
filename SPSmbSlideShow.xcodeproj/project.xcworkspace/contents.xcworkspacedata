@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:smb.xcodeproj">
+      location = "self:/Users/systemp/Documents/Xcode/smb/SPSmbSlideShow.xcodeproj">
    </FileRef>
 </Workspace>

@@ -6,14 +6,14 @@
 //  Copyright © 2016年 systemp. All rights reserved.
 //
 
-#import "AppSettings.h"
+#import "SPSmbAppSettings.h"
 #import "SPSmbPreferenceWindowController.h"
 
-@interface AppSettings ()
+@interface SPSmbAppSettings ()
 @property (strong)SPSmbPreferenceWindowController* preferenceController;
 @end
 
-@implementation AppSettings
+@implementation SPSmbAppSettings
 // Constants.
 static NSString * const SPPrefKeyServerPath = @"ServerPath";
 static NSString * const SPPrefKeyServerDirectory = @"ServerDirectory";
@@ -23,6 +23,7 @@ static NSString * const SPPrefKeyMountedVolumesName = @"MountedVolumeName";
 static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalSeconds";
 static NSString * const SPPrefKeyExcludedDirectoryArray = @"ExcludedDirectoryArray";
 static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExtentionArray";
+static NSString * const SPPrefKeyExludedArrayItemKey = @"Excluded";
 
 - (id)init
 {
@@ -96,5 +97,10 @@ static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExte
     [self loadPreferences];
     
     return [self isValidSettings];
+}
+
++(NSString*)exludedArrayItemKey
+{
+    return SPPrefKeyExludedArrayItemKey;
 }
 @end
