@@ -102,21 +102,6 @@ static NSString * const SPPrefKeyExludedArrayItemKey        = @"Excluded";
     return ( [self.serverPath length] > 0 );
 }
 
--(BOOL)showPreference
-{
-    self.preferenceController = [[SPSmbPreferenceWindowController alloc]initWithAppSettings:self];
-    [[NSApplication sharedApplication]
-     runModalForWindow:[self.preferenceController window]];
-    [[self.preferenceController window] orderOut:self];
-    BOOL result = NO;
-    if([self isValidSettings] && self.preferenceController.isApplied)
-    {
-        result = [self savePreferences];
-    }
-    
-    return result;
-}
-
 +(NSString*)exludedArrayItemKey
 {
     return SPPrefKeyExludedArrayItemKey;

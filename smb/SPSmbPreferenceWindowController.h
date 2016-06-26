@@ -13,7 +13,6 @@
 
 @interface SPSmbPreferenceWindowController : NSWindowController
 @property (weak)SPSmbAppSettings* appSettings;
-@property (assign)BOOL isApplied;
 
 - (id)initWithAppSettings:(SPSmbAppSettings*)appSettings;
 

@@ -8,8 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		4B086F651D16B69900D32CFA /* SPSmbAppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B086F641D16B69900D32CFA /* SPSmbAppSettings.m */; };
+		4B14281D1D1FB2920081FFEE /* NetSSCompositeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B14281C1D1FB2920081FFEE /* NetSSCompositeTests.m */; };
+		4B1428201D1FD0470081FFEE /* SPSmbSlideshow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B14281F1D1FD0470081FFEE /* SPSmbSlideshow.m */; };
 		4B6F191A1D1516FC00B06155 /* SPSmbPreferenceWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */; };
 		4B6F191B1D1516FC00B06155 /* SPSmbPreferenceWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */; };
+		4BA7DC2B1D1F87ED00DB7E55 /* SPSmbSlideShowTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7DC2A1D1F87ED00DB7E55 /* SPSmbSlideShowTests.m */; };
+		4BA7DC331D1F893C00DB7E55 /* SPSmbAppSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7DC321D1F893C00DB7E55 /* SPSmbAppSettingsTests.m */; };
 		4BF8589F1D0D4864003E7851 /* NetSSComponentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF858981D0D4864003E7851 /* NetSSComponentObject.m */; };
 		4BF858A01D0D4864003E7851 /* NetSSComposite.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF8589A1D0D4864003E7851 /* NetSSComposite.m */; };
 		4BF858A11D0D4864003E7851 /* NetSSFileListManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF8589C1D0D4864003E7851 /* NetSSFileListManager.m */; };
@@ -23,12 +27,29 @@
 		4BFF007C1C02C37F009302FF /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BFF007B1C02C37F009302FF /* DiskArbitration.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4BA7DC2D1D1F87ED00DB7E55 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BFF005F1C0296D4009302FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BFF00661C0296D4009302FF;
+			remoteInfo = SPSmbSlideShow;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		4B086F631D16B69900D32CFA /* SPSmbAppSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbAppSettings.h; sourceTree = "<group>"; };
 		4B086F641D16B69900D32CFA /* SPSmbAppSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbAppSettings.m; sourceTree = "<group>"; };
+		4B14281C1D1FB2920081FFEE /* NetSSCompositeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetSSCompositeTests.m; sourceTree = "<group>"; };
+		4B14281E1D1FD0470081FFEE /* SPSmbSlideshow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbSlideshow.h; sourceTree = "<group>"; };
+		4B14281F1D1FD0470081FFEE /* SPSmbSlideshow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbSlideshow.m; sourceTree = "<group>"; };
 		4B6F19171D1516FC00B06155 /* SPSmbPreferenceWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbPreferenceWindowController.h; sourceTree = "<group>"; };
 		4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbPreferenceWindowController.m; sourceTree = "<group>"; };
 		4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SPSmbPreferenceWindowController.xib; sourceTree = "<group>"; };
+		4BA7DC281D1F87ED00DB7E55 /* SPSmbSlideShowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPSmbSlideShowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BA7DC2A1D1F87ED00DB7E55 /* SPSmbSlideShowTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPSmbSlideShowTests.m; sourceTree = "<group>"; };
+		4BA7DC2C1D1F87ED00DB7E55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4BA7DC321D1F893C00DB7E55 /* SPSmbAppSettingsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbAppSettingsTests.m; sourceTree = "<group>"; };
 		4BF858971D0D4864003E7851 /* NetSSComponentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetSSComponentObject.h; path = NetSS/NetSSComponentObject.h; sourceTree = "<group>"; };
 		4BF858981D0D4864003E7851 /* NetSSComponentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NetSSComponentObject.m; path = NetSS/NetSSComponentObject.m; sourceTree = "<group>"; };
 		4BF858991D0D4864003E7851 /* NetSSComposite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetSSComposite.h; path = NetSS/NetSSComposite.h; sourceTree = "<group>"; };
@@ -51,6 +72,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4BA7DC251D1F87ED00DB7E55 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BFF00641C0296D4009302FF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -63,12 +91,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4BA7DC291D1F87ED00DB7E55 /* SPSmbSlideShowTests */ = {
+			isa = PBXGroup;
+			children = (
+				4B14281C1D1FB2920081FFEE /* NetSSCompositeTests.m */,
+				4BA7DC2A1D1F87ED00DB7E55 /* SPSmbSlideShowTests.m */,
+				4BA7DC2C1D1F87ED00DB7E55 /* Info.plist */,
+				4BA7DC321D1F893C00DB7E55 /* SPSmbAppSettingsTests.m */,
+			);
+			path = SPSmbSlideShowTests;
+			sourceTree = "<group>";
+		};
 		4BFF005E1C0296D4009302FF = {
 			isa = PBXGroup;
 			children = (
 				4BFE5B131C02E47100F1FCDD /* NetFS.framework */,
 				4BFF007B1C02C37F009302FF /* DiskArbitration.framework */,
 				4BFF00691C0296D4009302FF /* smb */,
+				4BA7DC291D1F87ED00DB7E55 /* SPSmbSlideShowTests */,
 				4BFF00681C0296D4009302FF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -77,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				4BFF00671C0296D4009302FF /* SPSmbSlideShow.app */,
+				4BA7DC281D1F87ED00DB7E55 /* SPSmbSlideShowTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -94,6 +135,8 @@
 				4BF8589E1D0D4864003E7851 /* NetSSLeaf.m */,
 				4BFF006A1C0296D4009302FF /* AppDelegate.h */,
 				4BFF006B1C0296D4009302FF /* AppDelegate.m */,
+				4B14281E1D1FD0470081FFEE /* SPSmbSlideshow.h */,
+				4B14281F1D1FD0470081FFEE /* SPSmbSlideshow.m */,
 				4B086F631D16B69900D32CFA /* SPSmbAppSettings.h */,
 				4B086F641D16B69900D32CFA /* SPSmbAppSettings.m */,
 				4B6F19171D1516FC00B06155 /* SPSmbPreferenceWindowController.h */,
@@ -120,6 +163,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4BA7DC271D1F87ED00DB7E55 /* SPSmbSlideShowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BA7DC2F1D1F87ED00DB7E55 /* Build configuration list for PBXNativeTarget "SPSmbSlideShowTests" */;
+			buildPhases = (
+				4BA7DC241D1F87ED00DB7E55 /* Sources */,
+				4BA7DC251D1F87ED00DB7E55 /* Frameworks */,
+				4BA7DC261D1F87ED00DB7E55 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4BA7DC2E1D1F87ED00DB7E55 /* PBXTargetDependency */,
+			);
+			name = SPSmbSlideShowTests;
+			productName = SPSmbSlideShowTests;
+			productReference = 4BA7DC281D1F87ED00DB7E55 /* SPSmbSlideShowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		4BFF00661C0296D4009302FF /* SPSmbSlideShow */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4BFF00781C0296D4009302FF /* Build configuration list for PBXNativeTarget "SPSmbSlideShow" */;
@@ -146,6 +207,10 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = systemp;
 				TargetAttributes = {
+					4BA7DC271D1F87ED00DB7E55 = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 4BFF00661C0296D4009302FF;
+					};
 					4BFF00661C0296D4009302FF = {
 						CreatedOnToolsVersion = 7.1.1;
 					};
@@ -165,11 +230,19 @@
 			projectRoot = "";
 			targets = (
 				4BFF00661C0296D4009302FF /* SPSmbSlideShow */,
+				4BA7DC271D1F87ED00DB7E55 /* SPSmbSlideShowTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4BA7DC261D1F87ED00DB7E55 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BFF00651C0296D4009302FF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -183,6 +256,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4BA7DC241D1F87ED00DB7E55 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B14281D1D1FB2920081FFEE /* NetSSCompositeTests.m in Sources */,
+				4BA7DC331D1F893C00DB7E55 /* SPSmbAppSettingsTests.m in Sources */,
+				4BA7DC2B1D1F87ED00DB7E55 /* SPSmbSlideShowTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BFF00631C0296D4009302FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -195,11 +278,20 @@
 				4BF8589F1D0D4864003E7851 /* NetSSComponentObject.m in Sources */,
 				4BF858A11D0D4864003E7851 /* NetSSFileListManager.m in Sources */,
 				4BFB06951D1E554800FFF8E0 /* SPSmbImageView.m in Sources */,
+				4B1428201D1FD0470081FFEE /* SPSmbSlideshow.m in Sources */,
 				4BF858A01D0D4864003E7851 /* NetSSComposite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4BA7DC2E1D1F87ED00DB7E55 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4BFF00661C0296D4009302FF /* SPSmbSlideShow */;
+			targetProxy = 4BA7DC2D1D1F87ED00DB7E55 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4BFF00721C0296D4009302FF /* MainMenu.xib */ = {
@@ -213,6 +305,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4BA7DC301D1F87ED00DB7E55 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SPSmbSlideShowTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.systemp.SPSmbSlideShowTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SPSmbSlideShow.app/Contents/MacOS/SPSmbSlideShow";
+			};
+			name = Debug;
+		};
+		4BA7DC311D1F87ED00DB7E55 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = SPSmbSlideShowTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.systemp.SPSmbSlideShowTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SPSmbSlideShow.app/Contents/MacOS/SPSmbSlideShow";
+			};
+			name = Release;
+		};
 		4BFF00761C0296D4009302FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -325,6 +443,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4BA7DC2F1D1F87ED00DB7E55 /* Build configuration list for PBXNativeTarget "SPSmbSlideShowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BA7DC301D1F87ED00DB7E55 /* Debug */,
+				4BA7DC311D1F87ED00DB7E55 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4BFF00621C0296D4009302FF /* Build configuration list for PBXProject "SPSmbSlideshow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

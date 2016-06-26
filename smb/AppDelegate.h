@@ -7,11 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "NetSSFileListManager.h"
+#import "SPSmbSlideshow.h"
 
-@class NetSSFileListManager;
-
-@interface AppDelegate : NSObject <NSApplicationDelegate, NetSSDirectoryDelegate>
-@property (copy)NSString* mountedRoot;
+@interface AppDelegate : NSObject <NSApplicationDelegate, SPSmbPresenterDelegate>
 @end
 

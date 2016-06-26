@@ -19,9 +19,9 @@
 @property (strong)NSArray* excludedDirectoryArray;
 
 - (void)loadPreferences;
+- (BOOL)savePreferences;
 - (void)setDefaultPreferences;
-- (BOOL)showPreference;
-- (BOOL) isValidSettings;
+- (BOOL)isValidSettings;
 + (NSString*)exludedArrayItemKey;
 
 @end

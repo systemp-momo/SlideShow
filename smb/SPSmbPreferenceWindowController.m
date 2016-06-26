@@ -41,7 +41,6 @@
             _temporaryExcludedFileExtentionArray = _appSettings.excludedFileExtentionArray;
             _temporaryExcludedDirectoryArray = _appSettings.excludedDirectoryArray;
         }
-        _isApplied = NO;
     }
     return self;
 }
@@ -61,8 +60,6 @@
 {
     [self.window endEditingFor:nil];
     
-    self.isApplied = YES;
-    
     self.appSettings.serverPath = self.temporaryServerPath;
     self.appSettings.serverDirectory = self.temporaryServerDirectory;
     self.appSettings.userName = self.temporaryUserName;
@@ -71,6 +68,8 @@
     self.appSettings.slideShowIntervalSeconds = @([self.temporarySlideShowIntervalSeconds integerValue]);
     self.appSettings.excludedFileExtentionArray = self.temporaryExcludedFileExtentionArray;
     self.appSettings.excludedDirectoryArray = self.temporaryExcludedDirectoryArray;
+    
+    [self.appSettings savePreferences];
     
     [self.window close];
 
