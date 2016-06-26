@@ -22,6 +22,7 @@ typedef void (^__notify_collecting_completion)();
 -(void)cancelCollecting;
 -(NSString*)getPathAtRandom;
 
+@property (strong, atomic)NSMutableArray* fileList;
 @property (atomic, copy) __notify_collecting_completion onCollectingCompletion;
 @property (atomic, assign)NSObject<NetSSDirectoryDelegate>* delegate;
 

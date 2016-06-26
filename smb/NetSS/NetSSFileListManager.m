@@ -13,7 +13,6 @@
 
 @interface NetSSFileListManager()
 @property (strong, atomic)NetSSComposite* root;
-@property (strong, atomic)NSMutableArray* fileList;
 @property (assign, atomic)bool isCollecting;
 @property (assign, atomic)bool cancel;
 @end

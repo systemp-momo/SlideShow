@@ -15,15 +15,15 @@
 
 @implementation SPSmbAppSettings
 // Constants.
-static NSString * const SPPrefKeyServerPath = @"ServerPath";
-static NSString * const SPPrefKeyServerDirectory = @"ServerDirectory";
-static NSString * const SPPrefKeyUserName = @"UserName";
-static NSString * const SPPrefKeyPassword = @"Password";
+static NSString * const SPPrefKeyServerPath         = @"ServerPath";
+static NSString * const SPPrefKeyServerDirectory    = @"ServerDirectory";
+static NSString * const SPPrefKeyUserName           = @"UserName";
+static NSString * const SPPrefKeyPassword           = @"Password";
 static NSString * const SPPrefKeyMountedVolumesName = @"MountedVolumeName";
-static NSString * const SPPrefKeySlideShowIntervalSeconds = @"SlideShowIntervalSeconds";
-static NSString * const SPPrefKeyExcludedDirectoryArray = @"ExcludedDirectoryArray";
+static NSString * const SPPrefKeySlideShowIntervalSeconds   = @"SlideShowIntervalSeconds";
+static NSString * const SPPrefKeyExcludedDirectoryArray     = @"ExcludedDirectoryArray";
 static NSString * const SPPrefKeyExcludedFileExtentionArray = @"ExcludedFileExtentionArray";
-static NSString * const SPPrefKeyExludedArrayItemKey = @"Excluded";
+static NSString * const SPPrefKeyExludedArrayItemKey        = @"Excluded";
 
 - (id)init
 {
@@ -49,6 +49,21 @@ static NSString * const SPPrefKeyExludedArrayItemKey = @"Excluded";
     _preferenceController = nil;
 }
 
+-(BOOL)savePreferences
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:self.serverPath forKey:SPPrefKeyServerPath];
+    [defaults setObject:self.serverDirectory forKey:SPPrefKeyServerDirectory];
+    [defaults setObject:self.userName forKey:SPPrefKeyUserName];
+    [defaults setObject:self.password forKey:SPPrefKeyPassword];
+    [defaults setObject:self.mountedVolumeName forKey:SPPrefKeyMountedVolumesName];
+    [defaults setObject:self.slideShowIntervalSeconds forKey:SPPrefKeySlideShowIntervalSeconds];
+    [defaults setObject:self.excludedFileExtentionArray forKey:SPPrefKeyExcludedFileExtentionArray];
+    [defaults setObject:self.excludedDirectoryArray forKey:SPPrefKeyExcludedDirectoryArray];
+    BOOL successful = [defaults synchronize];
+    return successful;
+}
+    
 -(void)loadPreferences
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -89,14 +104,17 @@ static NSString * const SPPrefKeyExludedArrayItemKey = @"Excluded";
 
 -(BOOL)showPreference
 {
-    self.preferenceController = [[SPSmbPreferenceWindowController alloc]initWithWindowNibName:@"SPSmbPreferenceWindowController"];
+    self.preferenceController = [[SPSmbPreferenceWindowController alloc]initWithAppSettings:self];
     [[NSApplication sharedApplication]
      runModalForWindow:[self.preferenceController window]];
     [[self.preferenceController window] orderOut:self];
+    BOOL result = NO;
+    if([self isValidSettings] && self.preferenceController.isApplied)
+    {
+        result = [self savePreferences];
+    }
     
-    [self loadPreferences];
-    
-    return [self isValidSettings];
+    return result;
 }
 
 +(NSString*)exludedArrayItemKey

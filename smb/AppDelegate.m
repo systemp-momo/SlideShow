@@ -127,7 +127,7 @@
 
 - (void)repeatMethod:(NSTimer *)timer
 {
-    [self.timer invalidate];
+    [timer invalidate];
     
     dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(globalQueue, ^(){
@@ -146,6 +146,8 @@
             self.displayingImagePath = path;
             self.imageView.toolTip = path;
             self.window.title = path;
+
+            [self.timer invalidate];
             self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
         });
     }
@@ -167,14 +169,8 @@
     
     NSString* extension = [fullpath pathExtension];
     
-    if(isImage && ![self containsStringCaseInsensitiveWithString:extension inExcludedArray:self.appSettings.excludedFileExtentionArray])
-    {
-        return YES;
-    }
-    else
-    {
-        return NO;
-    }
+    BOOL isValid = (isImage && ![self containsStringCaseInsensitiveWithString:extension inExcludedArray:self.appSettings.excludedFileExtentionArray]);
+    return isValid;
 }
 
 -(BOOL)containsStringCaseInsensitiveWithString:(NSString*)string inExcludedArray:(NSArray*)array

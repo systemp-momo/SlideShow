@@ -9,7 +9,12 @@
 #import <Cocoa/Cocoa.h>
 
 @class AppDelegate;
-@interface SPSmbPreferenceWindowController : NSWindowController
+@class SPSmbAppSettings;
 
+@interface SPSmbPreferenceWindowController : NSWindowController
+@property (weak)SPSmbAppSettings* appSettings;
+@property (assign)BOOL isApplied;
+
+- (id)initWithAppSettings:(SPSmbAppSettings*)appSettings;
 
 @end
