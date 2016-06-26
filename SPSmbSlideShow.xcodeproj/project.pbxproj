@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		4B1BEAB71D1E641800B7DB9C /* OCLint */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 4B1BEAB81D1E641800B7DB9C /* Build configuration list for PBXAggregateTarget "OCLint" */;
-			buildPhases = (
-				4B1BEABB1D1E642B00B7DB9C /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = OCLint;
-			productName = OCLint;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		4B086F651D16B69900D32CFA /* SPSmbAppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B086F641D16B69900D32CFA /* SPSmbAppSettings.m */; };
 		4B6F191A1D1516FC00B06155 /* SPSmbPreferenceWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */; };
@@ -160,12 +146,6 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = systemp;
 				TargetAttributes = {
-					4B1BEAB71D1E641800B7DB9C = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = D4FY4LTQ7B;
-						DevelopmentTeamName = "Teppei Suzuki (Personal Team)";
-						ProvisioningStyle = Automatic;
-					};
 					4BFF00661C0296D4009302FF = {
 						CreatedOnToolsVersion = 7.1.1;
 					};
@@ -185,7 +165,6 @@
 			projectRoot = "";
 			targets = (
 				4BFF00661C0296D4009302FF /* SPSmbSlideShow */,
-				4B1BEAB71D1E641800B7DB9C /* OCLint */,
 			);
 		};
 /* End PBXProject section */
@@ -202,22 +181,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4B1BEABB1D1E642B00B7DB9C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "XCTOOL=/usr/local\nexport PATH=$XCTOOL/bin:$PATH\nOCLINT_HOME=/usr/local/oclint-0.10.3\nexport PATH=$OCLINT_HOME/bin:$PATH\n\ncd ${SRCROOT}\n\nxctool -project LintTest.xcodeproj -scheme LintTestForLint -reporter json-compilation-database:compile_commands.json clean\nxctool -project LintTest.xcodeproj -scheme LintTestForLint -reporter json-compilation-database:compile_commands.json build\n\noclint-json-compilation-database | sed 's/\\(.*\\.\\m\\{1,2\\}:[0-9]*:[0-9]*:\\)/\\1 warning:/'";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4BFF00631C0296D4009302FF /* Sources */ = {
@@ -250,20 +213,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		4B1BEAB91D1E641800B7DB9C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		4B1BEABA1D1E641800B7DB9C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		4BFF00761C0296D4009302FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -376,14 +325,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B1BEAB81D1E641800B7DB9C /* Build configuration list for PBXAggregateTarget "OCLint" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4B1BEAB91D1E641800B7DB9C /* Debug */,
-				4B1BEABA1D1E641800B7DB9C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
 		4BFF00621C0296D4009302FF /* Build configuration list for PBXProject "SPSmbSlideshow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
