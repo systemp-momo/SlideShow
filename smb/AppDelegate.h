@@ -9,6 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import "SPSmbSlideshow.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, SPSmbPresenterDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, SPSmbPresenterProtocol>
 @end
 

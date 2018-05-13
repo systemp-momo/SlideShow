@@ -10,6 +10,8 @@
 		4B086F651D16B69900D32CFA /* SPSmbAppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B086F641D16B69900D32CFA /* SPSmbAppSettings.m */; };
 		4B14281D1D1FB2920081FFEE /* NetSSCompositeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B14281C1D1FB2920081FFEE /* NetSSCompositeTests.m */; };
 		4B1428201D1FD0470081FFEE /* SPSmbSlideshow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B14281F1D1FD0470081FFEE /* SPSmbSlideshow.m */; };
+		4B6D36FE1D28BCFE001E58AB /* SPSmbSmbAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6D36FD1D28BCFE001E58AB /* SPSmbSmbAccessor.m */; };
+		4B6D37011D28F705001E58AB /* SPSmbUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6D37001D28F705001E58AB /* SPSmbUserDefaults.m */; };
 		4B6F191A1D1516FC00B06155 /* SPSmbPreferenceWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */; };
 		4B6F191B1D1516FC00B06155 /* SPSmbPreferenceWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */; };
 		4BA7DC2B1D1F87ED00DB7E55 /* SPSmbSlideShowTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7DC2A1D1F87ED00DB7E55 /* SPSmbSlideShowTests.m */; };
@@ -43,6 +45,10 @@
 		4B14281C1D1FB2920081FFEE /* NetSSCompositeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetSSCompositeTests.m; sourceTree = "<group>"; };
 		4B14281E1D1FD0470081FFEE /* SPSmbSlideshow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbSlideshow.h; sourceTree = "<group>"; };
 		4B14281F1D1FD0470081FFEE /* SPSmbSlideshow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbSlideshow.m; sourceTree = "<group>"; };
+		4B6D36FC1D28BCFE001E58AB /* SPSmbSmbAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbSmbAccessor.h; sourceTree = "<group>"; };
+		4B6D36FD1D28BCFE001E58AB /* SPSmbSmbAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbSmbAccessor.m; sourceTree = "<group>"; };
+		4B6D36FF1D28F705001E58AB /* SPSmbUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbUserDefaults.h; sourceTree = "<group>"; };
+		4B6D37001D28F705001E58AB /* SPSmbUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbUserDefaults.m; sourceTree = "<group>"; };
 		4B6F19171D1516FC00B06155 /* SPSmbPreferenceWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSmbPreferenceWindowController.h; sourceTree = "<group>"; };
 		4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSmbPreferenceWindowController.m; sourceTree = "<group>"; };
 		4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SPSmbPreferenceWindowController.xib; sourceTree = "<group>"; };
@@ -91,6 +97,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B07C7351D290CC1009D35BD /* Infra */ = {
+			isa = PBXGroup;
+			children = (
+				4B6D36FF1D28F705001E58AB /* SPSmbUserDefaults.h */,
+				4B6D37001D28F705001E58AB /* SPSmbUserDefaults.m */,
+				4BF8589B1D0D4864003E7851 /* NetSSFileListManager.h */,
+				4BF8589C1D0D4864003E7851 /* NetSSFileListManager.m */,
+				4BF858971D0D4864003E7851 /* NetSSComponentObject.h */,
+				4BF858981D0D4864003E7851 /* NetSSComponentObject.m */,
+				4BF858991D0D4864003E7851 /* NetSSComposite.h */,
+				4BF8589A1D0D4864003E7851 /* NetSSComposite.m */,
+				4BF8589D1D0D4864003E7851 /* NetSSLeaf.h */,
+				4BF8589E1D0D4864003E7851 /* NetSSLeaf.m */,
+			);
+			name = Infra;
+			sourceTree = "<group>";
+		};
+		4B6D36FA1D27B0D4001E58AB /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				4BFB06931D1E554800FFF8E0 /* SPSmbImageView.h */,
+				4BFB06941D1E554800FFF8E0 /* SPSmbImageView.m */,
+				4B6F19171D1516FC00B06155 /* SPSmbPreferenceWindowController.h */,
+				4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */,
+				4BFF006A1C0296D4009302FF /* AppDelegate.h */,
+				4BFF006B1C0296D4009302FF /* AppDelegate.m */,
+			);
+			name = Presentation;
+			sourceTree = "<group>";
+		};
+		4B6D36FB1D27B0DF001E58AB /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				4B14281E1D1FD0470081FFEE /* SPSmbSlideshow.h */,
+				4B14281F1D1FD0470081FFEE /* SPSmbSlideshow.m */,
+				4B6D36FC1D28BCFE001E58AB /* SPSmbSmbAccessor.h */,
+				4B6D36FD1D28BCFE001E58AB /* SPSmbSmbAccessor.m */,
+				4B086F631D16B69900D32CFA /* SPSmbAppSettings.h */,
+				4B086F641D16B69900D32CFA /* SPSmbAppSettings.m */,
+			);
+			name = Domain;
+			sourceTree = "<group>";
+		};
 		4BA7DC291D1F87ED00DB7E55 /* SPSmbSlideShowTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,29 +174,14 @@
 		4BFF00691C0296D4009302FF /* smb */ = {
 			isa = PBXGroup;
 			children = (
-				4BF858971D0D4864003E7851 /* NetSSComponentObject.h */,
-				4BF858981D0D4864003E7851 /* NetSSComponentObject.m */,
-				4BF858991D0D4864003E7851 /* NetSSComposite.h */,
-				4BF8589A1D0D4864003E7851 /* NetSSComposite.m */,
-				4BF8589B1D0D4864003E7851 /* NetSSFileListManager.h */,
-				4BF8589C1D0D4864003E7851 /* NetSSFileListManager.m */,
-				4BF8589D1D0D4864003E7851 /* NetSSLeaf.h */,
-				4BF8589E1D0D4864003E7851 /* NetSSLeaf.m */,
-				4BFF006A1C0296D4009302FF /* AppDelegate.h */,
-				4BFF006B1C0296D4009302FF /* AppDelegate.m */,
-				4B14281E1D1FD0470081FFEE /* SPSmbSlideshow.h */,
-				4B14281F1D1FD0470081FFEE /* SPSmbSlideshow.m */,
-				4B086F631D16B69900D32CFA /* SPSmbAppSettings.h */,
-				4B086F641D16B69900D32CFA /* SPSmbAppSettings.m */,
-				4B6F19171D1516FC00B06155 /* SPSmbPreferenceWindowController.h */,
-				4B6F19181D1516FC00B06155 /* SPSmbPreferenceWindowController.m */,
+				4B07C7351D290CC1009D35BD /* Infra */,
+				4B6D36FB1D27B0DF001E58AB /* Domain */,
+				4B6D36FA1D27B0D4001E58AB /* Presentation */,
 				4B6F19191D1516FC00B06155 /* SPSmbPreferenceWindowController.xib */,
 				4BFF00701C0296D4009302FF /* Assets.xcassets */,
 				4BFF00721C0296D4009302FF /* MainMenu.xib */,
 				4BFF00751C0296D4009302FF /* Info.plist */,
 				4BFF006D1C0296D4009302FF /* Supporting Files */,
-				4BFB06931D1E554800FFF8E0 /* SPSmbImageView.h */,
-				4BFB06941D1E554800FFF8E0 /* SPSmbImageView.m */,
 			);
 			path = smb;
 			sourceTree = "<group>";
@@ -270,6 +304,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B6D37011D28F705001E58AB /* SPSmbUserDefaults.m in Sources */,
 				4BFF006F1C0296D4009302FF /* main.m in Sources */,
 				4BF858A21D0D4864003E7851 /* NetSSLeaf.m in Sources */,
 				4B086F651D16B69900D32CFA /* SPSmbAppSettings.m in Sources */,
@@ -277,6 +312,7 @@
 				4BFF006C1C0296D4009302FF /* AppDelegate.m in Sources */,
 				4BF8589F1D0D4864003E7851 /* NetSSComponentObject.m in Sources */,
 				4BF858A11D0D4864003E7851 /* NetSSFileListManager.m in Sources */,
+				4B6D36FE1D28BCFE001E58AB /* SPSmbSmbAccessor.m in Sources */,
 				4BFB06951D1E554800FFF8E0 /* SPSmbImageView.m in Sources */,
 				4B1428201D1FD0470081FFEE /* SPSmbSlideshow.m in Sources */,
 				4BF858A01D0D4864003E7851 /* NetSSComposite.m in Sources */,

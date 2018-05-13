@@ -25,7 +25,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Server" identifier="1" id="s5o-mb-YcC">
-                                <view key="view" ambiguous="YES" id="arO-gI-SXQ">
+                                <view key="view" id="arO-gI-SXQ">
                                     <rect key="frame" x="10" y="33" width="132" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -45,7 +45,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="-2" name="value" keyPath="self.temporaryServerPath" id="ab2-HD-qmR"/>
+                                                <binding destination="-2" name="value" keyPath="self.appSettings.serverPath" id="1z7-g5-Szj"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bgl-0n-0St">
@@ -64,7 +64,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="-2" name="value" keyPath="self.temporaryServerDirectory" id="gDU-6h-TbO"/>
+                                                <binding destination="-2" name="value" keyPath="self.appSettings.serverDirectory" id="3X4-IE-tzR"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eou-15-75F">
@@ -83,7 +83,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="-2" name="value" keyPath="self.temporaryUserName" id="qYY-bM-fNT"/>
+                                                <binding destination="-2" name="value" keyPath="self.appSettings.userName" id="RY1-sS-Cgz"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Ap-iJ-3R7">
@@ -102,7 +102,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="-2" name="value" keyPath="self.temporaryPassword" id="Ryw-uO-dtb"/>
+                                                <binding destination="-2" name="value" keyPath="self.appSettings.password" id="g2d-b9-fui"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Egz-iV-z3f">
@@ -121,7 +121,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="-2" name="value" keyPath="self.temporaryMountedVolumeName" id="ZH0-Is-d2z"/>
+                                                <binding destination="-2" name="value" keyPath="self.appSettings.mountedVolumeName" id="D27-1l-F59"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pcw-uC-o5W">
@@ -140,7 +140,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="-2" name="value" keyPath="self.temporarySlideShowIntervalSeconds" id="k54-Ms-jIE"/>
+                                                <binding destination="-2" name="value" keyPath="self.appSettings.slideShowIntervalSeconds" id="7V9-qa-Koq"/>
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S1H-1y-GUH">
@@ -163,7 +163,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Exclusion" identifier="2" id="MF8-0h-uPj">
-                                <view key="view" id="z5L-zd-ChS">
+                                <view key="view" ambiguous="YES" id="z5L-zd-ChS">
                                     <rect key="frame" x="10" y="33" width="434" height="187"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -340,11 +340,7 @@ DQ
                 <string>Excluded</string>
             </declaredKeys>
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="self.temporaryExcludedDirectoryArray" id="alN-N1-C1G">
-                    <dictionary key="options">
-                        <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
-                    </dictionary>
-                </binding>
+                <binding destination="-2" name="contentArray" keyPath="self.appSettings.excludedDirectoryArray" id="McP-MX-aI2"/>
             </connections>
         </arrayController>
         <arrayController automaticallyRearrangesObjects="YES" id="sye-wv-NcF" userLabel="ExcludedFileExtentionArray">
@@ -352,11 +348,7 @@ DQ
                 <string>Excluded</string>
             </declaredKeys>
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="self.temporaryExcludedFileExtentionArray" id="IbK-RF-uQG">
-                    <dictionary key="options">
-                        <bool key="NSHandlesContentAsCompoundValue" value="YES"/>
-                    </dictionary>
-                </binding>
+                <binding destination="-2" name="contentArray" keyPath="self.appSettings.excludedFileExtentionArray" id="wrH-NS-vGq"/>
             </connections>
         </arrayController>
     </objects>

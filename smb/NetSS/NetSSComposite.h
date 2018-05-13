@@ -8,6 +8,8 @@
 
 #import "NetSSComponentObject.h"
 
+// entity class
+
 @interface NetSSComposite : NetSSComponentObject
 @property(strong,atomic)NSMutableArray* children;
 @end

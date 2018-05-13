@@ -9,7 +9,7 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <IOKit/IOKitLib.h>
 #import "AppDelegate.h"
-#import "SPSmbSlideshow.h"
+
 #import "SPSmbPreferenceWindowController.h"
 
 @interface AppDelegate ()
@@ -31,25 +31,25 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     self.slideshow = [[SPSmbSlideshow alloc]init];
-    self.slideshow.delegate = self;
+    self.slideshow.presenter = self;
     [self.slideshow startup];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
 {
-    self.slideshow.delegate = nil;
+    self.slideshow.presenter = nil;
     self.slideshow = nil;
     self.displayingImage = nil;
 }
 
-- (IBAction)showPreferences:(id)sender
+- (IBAction)preferencesMenu:(id)sender
 {
-    [self showPreferences];
+    [self preferenceIsInvalid:self.slideshow.appSettings];
     return;
 }
 
 #pragma mark SPSmbPresenterDelegate
-- (void)setDisplayingImage:(NSImage*)image imagePath:(NSString*)path
+- (void)imageDidLoad:(NSImage*)image imagePath:(NSString*)path
 {
     self.displayingImage = image;
     self.imageView.toolTip = path;
@@ -57,16 +57,18 @@
     return;
 }
 
-- (void)showPreferences
+- (BOOL)preferenceIsInvalid:(SPSmbAppSettings*)appSettings
 {
-    SPSmbPreferenceWindowController *preferenceController = [[SPSmbPreferenceWindowController alloc]initWithAppSettings:self.slideshow.appSettings];
+    SPSmbPreferenceWindowController *preferenceController = [[SPSmbPreferenceWindowController alloc]initWithSettings:self.slideshow.appSettings];
+    
     [[NSApplication sharedApplication]
      runModalForWindow:[preferenceController window]];
     [[preferenceController window] orderOut:self];
-    
-    [self.slideshow updatePreferences];
-    
-    return;
+    if( preferenceController.isChanged )
+    {
+        [self.slideshow updatePreferences:preferenceController.appSettings];
+    }
+    return preferenceController.isChanged;
 }
 
 @end

@@ -7,13 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SPSmbUserDefaults.h"
 
 @class AppDelegate;
-@class SPSmbAppSettings;
+@class SPSmbSlideshow;
 
 @interface SPSmbPreferenceWindowController : NSWindowController
-@property (weak)SPSmbAppSettings* appSettings;
+- (id)initWithSettings:(SPSmbAppSettings *)appSettings;
 
-- (id)initWithAppSettings:(SPSmbAppSettings*)appSettings;
-
+@property(copy)SPSmbAppSettings* appSettings;
+@property(assign)BOOL isChanged;
 @end

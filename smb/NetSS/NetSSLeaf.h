@@ -8,6 +8,8 @@
 
 #import "NetSSComponentObject.h"
 
+// entity class
+
 @interface NetSSLeaf : NetSSComponentObject
 
 @end

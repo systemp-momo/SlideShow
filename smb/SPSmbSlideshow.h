@@ -8,17 +8,20 @@
 
 #import <Foundation/Foundation.h>
 #import "NetSSFileListManager.h"
-#import "SPSmbAppSettings.h"
 
-@protocol SPSmbPresenterDelegate
-- (void)setDisplayingImage:(NSImage*)image imagePath:(NSString*)path;
-- (void)showPreferences;
+@class SPSmbUserDefaults;
+@class SPSmbAppSettings;
+
+@protocol SPSmbPresenterProtocol
+- (void)imageDidLoad:(NSImage*)image imagePath:(NSString*)path;
+- (BOOL)preferenceIsInvalid:(SPSmbAppSettings*)appSettings;
 @end
 
 @interface SPSmbSlideshow : NSObject<NetSSDirectoryDelegate>
-@property (weak)NSObject<SPSmbPresenterDelegate>* delegate;
-@property (strong)SPSmbAppSettings *appSettings;
+@property (weak)NSObject<SPSmbPresenterProtocol>* presenter;
+@property (copy) SPSmbAppSettings* appSettings;
+
 - (void)startup;
-- (void)updatePreferences;
+- (void)updatePreferences:(SPSmbAppSettings*)appSettings;
 
 @end

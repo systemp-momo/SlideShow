@@ -8,20 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SPSmbAppSettings : NSObject
-@property (strong)NSString* serverPath;
-@property (strong)NSString* serverDirectory;
-@property (strong)NSString* userName;
-@property (strong)NSString* password;
-@property (strong)NSString* mountedVolumeName;
-@property (strong)NSNumber* slideShowIntervalSeconds;
-@property (strong)NSArray* excludedFileExtentionArray;
-@property (strong)NSArray* excludedDirectoryArray;
+// Entity
+extern NSString * const SPKeyExludedArrayItemKey;
 
-- (void)loadPreferences;
-- (BOOL)savePreferences;
-- (void)setDefaultPreferences;
+@interface SPSmbAppSettings : NSObject<NSCopying>
+
+// for smb.
+@property (copy)NSString* serverPath;
+@property (copy)NSString* userName;
+@property (copy)NSString* password;
+@property (copy)NSString* mountedVolumeName;
+
+// for slideshow.
+@property (copy)NSNumber* slideShowIntervalSeconds;
+@property (copy)NSString* serverDirectory;
+
+// for file system.
+@property (copy)NSArray* excludedFileExtentionArray;
+
+@property (copy)NSArray* excludedDirectoryArray;
+
 - (BOOL)isValidSettings;
-+ (NSString*)exludedArrayItemKey;
 
 @end

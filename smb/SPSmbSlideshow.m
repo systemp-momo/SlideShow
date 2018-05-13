@@ -7,21 +7,19 @@
 //
 
 #import <CoreFoundation/CoreFoundation.h>
-#import <IOKit/IOKitLib.h>
-#import <DiskArbitration/DiskArbitration.h>
-#import <DiskArbitration/DADisk.h>
-#import <DiskArbitration/DADissenter.h>
-#import <DiskArbitration/DASession.h>
 #import <NetFS/NetFS.h>
 #import "NetSSFileListManager.h"
 #import "SPSmbAppSettings.h"
 #import "SPSmbSlideshow.h"
-#import "SPSmbPreferenceWindowController.h"
+#import "SPSmbSmbAccessor.h"
+#import "SPSmbUserDefaults.h"
 
 @interface SPSmbSlideshow ()
 
 @property (strong) NetSSFileListManager* fileListManager;
+@property (strong) SPSmbUserDefaults* userDefaults;
 @property (strong) NSTimer* timer;
+@property (strong) SPSmbSmbAccessor* smbAccessor;
 @end
 
 @implementation SPSmbSlideshow
@@ -32,88 +30,73 @@
     self = [super init];
     if(self != nil)
     {
-        self.appSettings = [[SPSmbAppSettings alloc]init];
-        self.fileListManager  = [[NetSSFileListManager alloc]init];
-        self.fileListManager.delegate = self;
+        _fileListManager  = [[NetSSFileListManager alloc]init];
+        _fileListManager.delegate = self;
+        _userDefaults = [[SPSmbUserDefaults alloc]init];
+        _presenter = nil;
+        _smbAccessor = [[SPSmbSmbAccessor alloc]init];
+        _appSettings = [[SPSmbAppSettings alloc]init];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    self.fileListManager.delegate = nil;
-    self.fileListManager = nil;
-    [self.timer invalidate];
-    self.timer = nil;
-    self.appSettings = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+                                                          
+    _smbAccessor = nil;
+    _fileListManager.delegate = nil;
+    _fileListManager = nil;
+    [_timer invalidate];
+    _timer = nil;
+    _appSettings = nil;
+    _presenter = nil;
 }
 
 #pragma mark Handling Application.
 - (void)startup
 {
+    self.appSettings = [self.userDefaults queryPreferences];
+    
     if( ![self.appSettings isValidSettings] )
     {
-        if( self.delegate!=nil && [self.delegate respondsToSelector:@selector(showPreferences)] )
+        if( self.presenter!=nil && [self.presenter respondsToSelector:@selector(preferenceIsInvalid:)] )
         {
-            [self.delegate showPreferences];
+            [self.presenter preferenceIsInvalid:self.appSettings];
         }
     }
     else
     {
-        [self mount];
+        self.smbAccessor.serverPath = self.appSettings.serverPath;
+        self.smbAccessor.userName = self.appSettings.userName;
+        self.smbAccessor.password = self.appSettings.password;
+        self.smbAccessor.mountedVolumeName = self.appSettings.mountedVolumeName;
+        [self.smbAccessor mount:^(NSString* mountedPoint)
+        {
+            [self startSlideShow:mountedPoint];
+        }];
     }
 }
 
-- (void)updatePreferences
+#pragma mark Preferences
+- (void)updatePreferences:(SPSmbAppSettings*)appSettings
 {
-    [self startup];
-    
-    return;
-}
-
-#pragma mark For SMB.
--(void)mount
-{
-    NSString* fullpath = [NSString stringWithFormat:@"smb://%@", self.appSettings.serverPath];
-    CFURLRef url = (__bridge CFURLRef)[NSURL URLWithString:fullpath];
-    CFURLRef path = (__bridge CFURLRef)[NSURL URLWithString:self.appSettings.mountedVolumeName];
-    CFStringRef username = (__bridge CFStringRef)(self.appSettings.userName);
-    CFStringRef password = (__bridge CFStringRef)(self.appSettings.password);
-    
-    NSMutableDictionary *openOptions = [NSMutableDictionary dictionaryWithObject:@NO forKey:(NSString*)kNetFSMountAtMountDirKey];;
-    AsyncRequestID requestID;
-    dispatch_queue_t dispath = dispatch_get_main_queue();
-    
-    NetFSMountURLBlock mount_report = ^(int status, AsyncRequestID requestID, CFArrayRef mountpoints)
-    {
-        CFStringRef str = CFArrayGetValueAtIndex(mountpoints, 0);
-        NSString* mountPoint = [NSString stringWithString:(__bridge_transfer NSString*)str];
-        [self mountDidFinished:mountPoint];
-    };
-    
-    NetFSMountURLAsync(url, path, username, password, (__bridge CFMutableDictionaryRef)(openOptions), nil, &requestID, dispath, mount_report);
-    
-    return;
-}
-
--(void) mountDidFinished:(NSString*)point
-{
-    [self startSlideShow:point];
-    
-    return;
+    [self.userDefaults updatePreferences:appSettings];
 }
 
 #pragma mark Slideshow
 -(void)startSlideShow:(NSString*)rootDirectory
 {
+    SPSmbAppSettings *settings = self.appSettings;
+
     [self.timer invalidate];
     
     self.fileListManager.onCollectingCompletion = ^(){};
     
-    NSString* scanPath = [NSString stringWithFormat:@"%@/%@", rootDirectory, self.appSettings.serverDirectory];
+    NSString* scanPath = [NSString stringWithFormat:@"%@/%@", rootDirectory, settings.serverDirectory];
     [self.fileListManager collectTree:scanPath];
     
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:[settings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
 }
 
 - (void)repeatMethod:(NSTimer *)timer
@@ -131,15 +114,17 @@
     NSString* path = [self.fileListManager getPathAtRandom];
     if(path)
     {
+        SPSmbAppSettings *settings = self.appSettings;
+
         NSImage* loadedImage = [[NSImage alloc] initWithContentsOfFile:path];
         dispatch_async(dispatch_get_main_queue(), ^(){
-            if( self.delegate!=nil && [self.delegate respondsToSelector:@selector(setDisplayingImage:imagePath:)])
+            if( self.presenter!=nil && [self.presenter respondsToSelector:@selector(imageDidLoad:imagePath:)])
             {
-                [self.delegate setDisplayingImage:loadedImage imagePath:path];
+                [self.presenter imageDidLoad:loadedImage imagePath:path];
             }
             
             [self.timer invalidate];
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:[self.appSettings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:[settings.slideShowIntervalSeconds integerValue] target:self selector:@selector(repeatMethod:) userInfo:nil repeats:NO];
         });
     }
 }
@@ -147,12 +132,15 @@
 #pragma mark NetSSDirectoryDelegate
 -(BOOL)isValidDirectoryName:(NSString*)fullpath
 {
+    SPSmbAppSettings *settings = self.appSettings;
+
     NSString* directoryName = [[fullpath pathComponents] lastObject];
-    return (![self containsStringCaseInsensitiveWithString:directoryName inExcludedArray:self.appSettings.excludedDirectoryArray]);
+    return (![self containsStringCaseInsensitiveWithString:directoryName inExcludedArray:settings.excludedDirectoryArray]);
 }
 
 -(BOOL)isValidFileName:(NSString*)fullpath
 {
+    SPSmbAppSettings *settings = self.appSettings;
     BOOL isImage = NO;
     
     NSString* uti=[[NSWorkspace sharedWorkspace] typeOfFile:fullpath error:nil];
@@ -160,7 +148,7 @@
     
     NSString* extension = [fullpath pathExtension];
     
-    BOOL isValid = (isImage && ![self containsStringCaseInsensitiveWithString:extension inExcludedArray:self.appSettings.excludedFileExtentionArray]);
+    BOOL isValid = (isImage && ![self containsStringCaseInsensitiveWithString:extension inExcludedArray:settings.excludedFileExtentionArray]);
     return isValid;
 }
 
@@ -168,7 +156,7 @@
 {
     __block BOOL contains = NO;
     [array enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSDictionary* content, NSUInteger idx, BOOL* stop){
-        NSString *excluded = content[[SPSmbAppSettings exludedArrayItemKey]];
+        NSString *excluded = content[SPKeyExludedArrayItemKey];
         contains = (NSOrderedSame == [string caseInsensitiveCompare:excluded]);
         *stop = contains;
     }];

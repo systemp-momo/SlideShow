@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+// entity class
+
 @interface NetSSComponentObject : NSObject
 @property (strong, atomic)NSString* fullPath;
 @end

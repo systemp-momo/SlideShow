@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 systemp. All rights reserved.
 //
 
+// infra class
+
+
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 

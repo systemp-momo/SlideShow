@@ -7,48 +7,42 @@
 //
 
 #import "SPSmbPreferenceWindowController.h"
-#import "AppDelegate.h"
 #import "SPSmbAppSettings.h"
 
 @interface SPSmbPreferenceWindowController ()
-@property (copy)NSString* temporaryServerPath;
-@property (copy)NSString* temporaryServerDirectory;
-@property (copy)NSString* temporaryUserName;
-@property (copy)NSString* temporaryPassword;
-@property (copy)NSString* temporaryMountedVolumeName;
-@property (copy)NSString* temporarySlideShowIntervalSeconds;
-@property (copy)NSArray* temporaryExcludedFileExtentionArray;
-@property (copy)NSArray* temporaryExcludedDirectoryArray;
+
+@property (strong) SPSmbSlideshow* slideshow;
+
 @end
 
 @implementation SPSmbPreferenceWindowController
 
-- (id)initWithAppSettings:(SPSmbAppSettings*)appSettings
+- (id)initWithSettings:(SPSmbAppSettings *)appSettings
 {
     self = [super initWithWindowNibName:@"SPSmbPreferenceWindowController"];
     
     if(self!=nil)
     {
-        _appSettings = appSettings;
-        if( _appSettings != nil)
+        if( appSettings != nil)
         {
-            _temporaryServerPath = _appSettings.serverPath;
-            _temporaryServerDirectory = _appSettings.serverDirectory;
-            _temporaryUserName = _appSettings.userName;
-            _temporaryPassword = _appSettings.password;
-            _temporaryMountedVolumeName = _appSettings.mountedVolumeName;
-            _temporarySlideShowIntervalSeconds = [_appSettings.slideShowIntervalSeconds stringValue];
-            _temporaryExcludedFileExtentionArray = _appSettings.excludedFileExtentionArray;
-            _temporaryExcludedDirectoryArray = _appSettings.excludedDirectoryArray;
+            _appSettings = appSettings;
+            _isChanged= NO;
         }
     }
     return self;
+}
+
+-(void)dealloc
+{
+    _appSettings = nil;
+    _slideshow = nil;
 }
 
 - (void)windowDidLoad {
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+    self.isChanged = NO;
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -60,17 +54,8 @@
 {
     [self.window endEditingFor:nil];
     
-    self.appSettings.serverPath = self.temporaryServerPath;
-    self.appSettings.serverDirectory = self.temporaryServerDirectory;
-    self.appSettings.userName = self.temporaryUserName;
-    self.appSettings.password = self.temporaryPassword;
-    self.appSettings.mountedVolumeName = self.temporaryMountedVolumeName;
-    self.appSettings.slideShowIntervalSeconds = @([self.temporarySlideShowIntervalSeconds integerValue]);
-    self.appSettings.excludedFileExtentionArray = self.temporaryExcludedFileExtentionArray;
-    self.appSettings.excludedDirectoryArray = self.temporaryExcludedDirectoryArray;
-    
-    [self.appSettings savePreferences];
-    
+    self.isChanged = YES;
+
     [self.window close];
 
     return;
